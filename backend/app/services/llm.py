@@ -18,9 +18,9 @@ def get_llm(temperature: float = 0.0, streaming: bool = True):
         model_name = settings.GROK_MODEL
         if model_name == "grok-beta" or model_name == "llama-3.3-7b-versatile":
             # Make sure we use a model that exists on Groq. 
-            # llama-3.3-7b-versatile is the current standard free Groq model.
+            # llama-3.3-70b-versatile is the current standard free Groq model.
             # deepseek-r1-distill-llama-70b is also excellent.
-            model_name = "llama-3.3-7b-versatile"
+            model_name = "llama-3.3-70b-versatile"
             
         logger.info(f"Initializing Groq ChatOpenAI model: {model_name}")
         from langchain_openai import ChatOpenAI
