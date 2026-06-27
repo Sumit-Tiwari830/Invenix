@@ -31,10 +31,17 @@ class Settings(BaseSettings):
         os.makedirs(chroma_path, exist_ok=True)
         return chroma_path
 
+    # Provider settings (ollama, groq, grok)
+    LLM_PROVIDER: str = "ollama"
+    
     # Ollama settings
     OLLAMA_API_BASE: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "qwen2.5:1.5b"
     OLLAMA_EMBEDDINGS_MODEL: str = "nomic-embed-text"
+
+    # Groq/Grok settings
+    GROK_API_KEY: str = ""
+    GROK_MODEL: str = "llama-3.3-7b-versatile"
 
     class Config:
         case_sensitive = True
