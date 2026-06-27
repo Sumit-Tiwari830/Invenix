@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
-from app.models.models import Chat, Message, DocumentChunk
+from app.models.models import Chat, Message, DocumentChunk, Document
 from app.services.llm import get_llm
 from app.services.vector_store import VectorStoreManager
 
@@ -99,7 +99,16 @@ async def generate_response(
             except Exception as e:
                 logger.error(f"Error reformulating query: {str(e)}. Using original query.")
 
-        # 5. Retrieve documents from ChromaDB
+        # 5. Check if knowledge base is empty
+        doc_count = db.query(Document).filter(Document.knowledge_base_id == kb_id).count()
+        if doc_count == 0:
+            warning_msg = "The knowledge base is currently empty. Please upload some documents first!"
+            yield f'0:"{warning_msg}"\n'
+            bot_msg = Message(chat_id=chat_id, role="assistant", content=warning_msg)
+            db.add(bot_msg)
+            db.commit()
+            return
+
         vector_store = VectorStoreManager(f"kb_{kb_id}")
         docs_with_scores = vector_store.similarity_search_with_score(standalone_query, k=4)
         

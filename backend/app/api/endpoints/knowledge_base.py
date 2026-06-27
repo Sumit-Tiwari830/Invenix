@@ -115,6 +115,11 @@ def query_kb(kb_id: int, req: schemas.QueryRequest, db: Session = Depends(get_db
         raise HTTPException(status_code=404, detail="Knowledge base not found")
         
     try:
+        # Check if KB is empty
+        doc_count = db.query(models.models.Document).filter(models.models.Document.knowledge_base_id == kb_id).count()
+        if doc_count == 0:
+            return {"results": []}
+
         vector_store = VectorStoreManager(f"kb_{kb_id}")
         results = vector_store.similarity_search_with_score(req.query, k=req.top_k)
         
