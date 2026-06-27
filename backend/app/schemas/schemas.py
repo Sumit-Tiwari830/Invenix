@@ -7,8 +7,8 @@ class MessageBase(BaseModel):
     role: str
     content: str
 
-class MessageCreate(MessageBase):
-    pass
+class MessageCreate(BaseModel):
+    content: str
 
 class Message(MessageBase):
     id: int
