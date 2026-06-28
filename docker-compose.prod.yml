@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      # Persists SQLite DB, ChromaDB index, and uploads folder on the host machine
+      - ./backend/data:/app/data
+    environment:
+      - LLM_PROVIDER=grok
+      - GROK_API_KEY=${GROK_API_KEY}
+      - GROK_MODEL=llama-3.3-70b-versatile
+      - OLLAMA_API_BASE=http://host.docker.internal:11434
+    extra_hosts:
+      # Allows the backend container to communicate with Ollama running on the host machine
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always

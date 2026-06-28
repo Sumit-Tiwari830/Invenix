@@ -33,15 +33,19 @@ class Settings(BaseSettings):
 
     # Provider settings (ollama, groq, grok)
     LLM_PROVIDER: str = "ollama"
+    EMBEDDINGS_PROVIDER: str = "ollama"
     
     # Ollama settings
     OLLAMA_API_BASE: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "qwen2.5:1.5b"
     OLLAMA_EMBEDDINGS_MODEL: str = "nomic-embed-text"
 
+    # Hugging Face embeddings
+    HF_EMBEDDINGS_MODEL: str = "all-MiniLM-L6-v2"
+
     # Groq/Grok settings
     GROK_API_KEY: str = ""
-    GROK_MODEL: str = "llama-3.3-7b-versatile"
+    GROK_MODEL: str = "llama-3.3-70b-versatile"
 
     class Config:
         case_sensitive = True
